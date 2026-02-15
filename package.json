@@ -21,7 +21,7 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["universal"]
+          "arch": ["arm64", "x64"]
         }
       ]
     },
@@ -42,9 +42,11 @@
     },
     "files": [
       "build/**/*",
-      "electron/**/*",
-      "node_modules/**/*"
+      "electron/**/*"
     ],
+    "extraMetadata": {
+      "main": "electron/main.js"
+    },
     "directories": {
       "buildResources": "public"
     }

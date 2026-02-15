@@ -4,8 +4,12 @@
 
 set -e
 
+# Always run from the project root (parent of scripts/)
+cd "$(dirname "$0")/.."
+
 echo "🔧 Tabl Viz DMG Builder"
 echo "========================"
+echo "📂 Working directory: $(pwd)"
 
 # Check we're on macOS
 if [[ "$(uname)" != "Darwin" ]]; then

@@ -138,17 +138,33 @@ const ChartCanvas = () => {
 
   const hasData = processedData.length > 0 && xAxis && yFields.length > 0;
 
-  const axisStyle = { stroke: '#64748b', fontSize: 11, fill: '#94a3b8' };
   const gridProps = showGrid ? { strokeDasharray: '3 3', stroke: '#2d3a4d' } : { stroke: 'transparent' };
+
+  // Custom tick renderer to ensure labels always show with rotation
+  const renderXTick = ({ x, y, payload }) => (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0} y={0} dy={12}
+        textAnchor="end"
+        fill="#94a3b8"
+        fontSize={11}
+        transform="rotate(-40)"
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+
+  const yTickProps = { fontSize: 11, fill: '#94a3b8' };
 
   const renderBarChart = () => {
     if (!hasData) return renderEmptyState();
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={processedData} margin={{ top: 20, right: 30, left: 10, bottom: 70 }}>
+        <BarChart data={processedData} margin={{ top: 20, right: 30, left: 10, bottom: 80 }}>
           <CartesianGrid {...gridProps} />
-          <RXAxis dataKey={xAxis} {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} angle={-45} textAnchor="end" height={80} interval={0} />
-          <RYAxis {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+          <RXAxis dataKey={xAxis} type="category" tick={renderXTick} height={90} interval={0} stroke="#64748b" />
+          <RYAxis stroke="#64748b" tick={yTickProps} />
           <Tooltip content={<CustomTooltip />} />
           {showLegend && <Legend wrapperStyle={{ color: '#94a3b8' }} />}
           {yFields.map((field, idx) => (
@@ -163,10 +179,10 @@ const ChartCanvas = () => {
     if (!hasData) return renderEmptyState();
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={processedData} margin={{ top: 20, right: 30, left: 10, bottom: 70 }}>
+        <LineChart data={processedData} margin={{ top: 20, right: 30, left: 10, bottom: 80 }}>
           <CartesianGrid {...gridProps} />
-          <RXAxis dataKey={xAxis} {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} angle={-45} textAnchor="end" height={80} interval={0} />
-          <RYAxis {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+          <RXAxis dataKey={xAxis} type="category" tick={renderXTick} height={90} interval={0} stroke="#64748b" />
+          <RYAxis stroke="#64748b" tick={yTickProps} />
           <Tooltip content={<CustomTooltip />} />
           {showLegend && <Legend wrapperStyle={{ color: '#94a3b8' }} />}
           {yFields.map((field, idx) => (
@@ -191,8 +207,8 @@ const ChartCanvas = () => {
             ))}
           </defs>
           <CartesianGrid {...gridProps} />
-          <RXAxis dataKey={xAxis} {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} angle={-45} textAnchor="end" height={80} interval={0} />
-          <RYAxis {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+          <RXAxis dataKey={xAxis} type="category" tick={renderXTick} height={90} interval={0} stroke="#64748b" />
+          <RYAxis stroke="#64748b" tick={yTickProps} />
           <Tooltip content={<CustomTooltip />} />
           {showLegend && <Legend wrapperStyle={{ color: '#94a3b8' }} />}
           {yFields.map((field, idx) => (
@@ -207,10 +223,10 @@ const ChartCanvas = () => {
     if (!processedData.length || !xAxis || !yFields.length) return renderEmptyState();
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <ScatterChart margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
+        <ScatterChart margin={{ top: 20, right: 30, left: 10, bottom: 80 }}>
           <CartesianGrid {...gridProps} />
-          <RXAxis dataKey={xAxis} name={formatColumnName(xAxis)} {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} type="category" />
-          <RYAxis dataKey={yFields[0]} name={formatColumnName(yFields[0])} {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+          <RXAxis dataKey={xAxis} name={formatColumnName(xAxis)} type="category" tick={renderXTick} height={90} interval={0} stroke="#64748b" />
+          <RYAxis dataKey={yFields[0]} name={formatColumnName(yFields[0])} stroke="#64748b" tick={yTickProps} />
           <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
           {showLegend && <Legend />}
           <Scatter name={formatColumnName(yFields[0])} data={processedData} fill={colors[0]} animationDuration={600} />
@@ -297,10 +313,10 @@ const ChartCanvas = () => {
     const bins = computeHistogramBins(values);
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={bins} margin={{ top: 20, right: 30, left: 10, bottom: 70 }}>
+        <BarChart data={bins} margin={{ top: 20, right: 30, left: 10, bottom: 80 }}>
           <CartesianGrid {...gridProps} />
-          <RXAxis dataKey="range" {...axisStyle} tick={{ fontSize: 10, fill: '#94a3b8' }} angle={-45} textAnchor="end" height={80} interval={0} />
-          <RYAxis {...axisStyle} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+          <RXAxis dataKey="range" type="category" tick={renderXTick} height={90} interval={0} stroke="#64748b" />
+          <RYAxis stroke="#64748b" tick={yTickProps} />
           <Tooltip content={<CustomTooltip />} />
           <Bar dataKey="count" name="Frequency" fill={colors[0]} radius={[4, 4, 0, 0]} animationDuration={600} />
         </BarChart>
